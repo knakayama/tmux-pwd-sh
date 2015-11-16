@@ -33,3 +33,7 @@ MIT
 ## Author
 
 [knakayama](https://github.com/knakayama)
+
+## TODO
+
+no echo pass to tty
