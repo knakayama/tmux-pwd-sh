@@ -3,9 +3,6 @@
 CURRENT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${CURRENT_DIR}/helpers.sh"
 
-readonly pwd_sh_size="$(get_tmux_option "@pwd-sh-size" "7")"
-readonly pass="$1"
-
 for cmd in "pwd.sh" "peco" "pbcopy"; do
   if ! exist "$cmd"; then
     display_msg "$cmd does not found in your PATH."
@@ -13,10 +10,15 @@ for cmd in "pwd.sh" "peco" "pbcopy"; do
   fi
 done
 
-tmux split-window -l $pwd_sh_size "pwd.sh r all \
-  | grep -vE '^($|Done)' \
+readonly pwd_sh_size="$(get_tmux_option "@pwd-sh-size" "7")"
+readonly pass="$1"
+
+tmux split-window -l $pwd_sh_size "echo $pass \
+  | pwd.sh r all \
+  | awk '{print \$2}' \
   | peco \
-  | awk '{print \$1}' \
+  | pwd.sh r <<(echo $pass) \
+  | awk 'NR == 3 {print \$1}' \
   | pbcopy"
 
 # Local Variables:
