@@ -5,7 +5,9 @@ source "${CURRENT_DIR}/scripts/helpers.sh"
 
 readonly pwd_sh_key="$(get_tmux_option "@pwd-sh-key" "P")"
 
-tmux bind-key "$pwd_sh_key" run-shell "${CURRENT_DIR}/scripts/pwd-sh.sh"
+tmux bind-key "$pwd_sh_key" \
+  command-prompt -p "Enter password:" \
+  "run-shell '${CURRENT_DIR}/scripts/pwd-sh.sh %%'"
 
 # Local Variables:
 # mode: Shell-Script
